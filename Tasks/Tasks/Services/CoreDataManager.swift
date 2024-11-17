@@ -31,7 +31,7 @@ class CoreDataManager: ObservableObject {
     }
     
     // MARK: - CRUD operators
-    func createSingleTaskCoreData(from taskAPI: SingleTask) {
+    func createSingleTaskCoreData(from taskAPI: SingleTask, title: String? = nil, date: String? = nil) {
         let singleTask = SingleTaskCoreData(context: mainContext)
         
         singleTask.apiId = Int64(taskAPI.id)
@@ -39,8 +39,8 @@ class CoreDataManager: ObservableObject {
         singleTask.completed = taskAPI.completed
         singleTask.todo = taskAPI.todo
         singleTask.userId = Int64(taskAPI.userId)
-        singleTask.title = "API did not provided title"
-        singleTask.date = "API did not provided date"
+        singleTask.title = title ?? "API did not provid title"
+        singleTask.date = date ?? "API did not provid date"
         saveContext()
     }
     

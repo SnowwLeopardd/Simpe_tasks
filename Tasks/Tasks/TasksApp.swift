@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct TasksApp: App {
+    @StateObject private var coreDataManager = CoreDataManager()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(coreDataManager)
         }
     }
 }
