@@ -11,6 +11,15 @@ class CoreDataManager: ObservableObject {
     let mainContext: NSManagedObjectContext
     
     @Published var savedEntities: [SingleTaskCoreData] = []
+    @Published var searchText: String = ""
+    
+    var filteredSavedEntities: [SingleTaskCoreData] {
+        guard !searchText.isEmpty else { return savedEntities }
+        return savedEntities.filter { savedEntity in
+            savedEntity.todo?.lowercased().contains(searchText.lowercased()) ?? false ||
+            savedEntity.title?.lowercased().contains(searchText.lowercased()) ?? false
+        }
+    }
     
     init(mainContext: NSManagedObjectContext = CoreDataStack.shared.mainContext) {
         self.mainContext = mainContext

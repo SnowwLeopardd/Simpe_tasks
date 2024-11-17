@@ -12,14 +12,26 @@ struct ContentView: View {
     private let networkManager: NetworkManagerProtocol = NetworkManager()
     
     @EnvironmentObject var coreDataManager: CoreDataManager
-    
     @State private var path = [SingleTaskCoreData]()
     
     var body: some View {
         NavigationStack(path: $path) {
                 List {
-                    ForEach(coreDataManager.savedEntities) { task in
+                    ForEach(coreDataManager.filteredSavedEntities) { task in
                         TaskView(path: $path , task: task)
+                            .contextMenu {
+                                Button {
+                                    path.append(task)
+                                } label: {
+                                    Label("Edit", systemImage: "pencil")
+                                }
+                                
+                                Button(role: .destructive) {
+                                    coreDataManager.delete(task)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                            }
                     }
                     .onDelete(perform: deleteItems)
                 }
@@ -40,6 +52,7 @@ struct ContentView: View {
                         }
                     }
                 }
+                .searchable(text: $coreDataManager.searchText)
         }
     }
     

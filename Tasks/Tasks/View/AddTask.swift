@@ -64,7 +64,7 @@ struct AddTask: View {
             Button(action: {
                 let task = SingleTask(
                     id: coreDataManager.savedEntities.count + 1,
-                    todo: taskTitleTextField,
+                    todo: taskDescriptionTextField,
                     completed: false,
                     userId: Int.random(in: 1...1000000000)
                 )
