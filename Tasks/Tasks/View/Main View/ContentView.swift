@@ -53,6 +53,8 @@ struct ContentView: View {
                     }
                 }
                 .searchable(text: $coreDataManager.searchText)
+            
+            MockTabView()
         }
     }
     
