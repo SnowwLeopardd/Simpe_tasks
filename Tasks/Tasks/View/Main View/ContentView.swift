@@ -27,7 +27,9 @@ struct ContentView: View {
                                 }
                                 
                                 Button(role: .destructive) {
-                                    coreDataManager.delete(task)
+                                    DispatchQueue.global().async {
+                                        coreDataManager.delete(task)
+                                    }
                                 } label: {
                                     Label(String(localized: "Delete"), systemImage: "trash")
                                 }
@@ -45,13 +47,6 @@ struct ContentView: View {
                     DetailTaskView(path: $path, task: task)
                 })
                 .navigationTitle(String(localized: "Tasks"))
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        NavigationLink(destination: AddTask()) {
-                            Text(String(localized:"Add_task"))
-                        }
-                    }
-                }
                 .searchable(text: $coreDataManager.searchText)
             
             MockTabView()
@@ -60,8 +55,10 @@ struct ContentView: View {
     
     private func deleteItems(offsets: IndexSet) {
         offsets.forEach { index in
-            let taskToDelete = coreDataManager.savedEntities[index]
-            coreDataManager.delete(taskToDelete)
+            DispatchQueue.global().async {
+                let taskToDelete = coreDataManager.savedEntities[index]
+                coreDataManager.delete(taskToDelete)
+            }
         }
     }
     

@@ -62,18 +62,20 @@ struct AddTask: View {
             Spacer()
             
             Button(action: {
-                let task = SingleTask(
-                    id: coreDataManager.savedEntities.count + 1,
-                    todo: taskDescriptionTextField,
-                    completed: false,
-                    userId: Int.random(in: 1...1000000000)
-                )
-                
-                coreDataManager.createSingleTaskCoreData(
-                    from: task,
-                    title: taskTitleTextField,
-                    date: .now
+                DispatchQueue.global().async {
+                    let task = SingleTask(
+                        id: coreDataManager.savedEntities.count + 1,
+                        todo: taskDescriptionTextField,
+                        completed: false,
+                        userId: Int.random(in: 1...1000000000)
                     )
+                    
+                    coreDataManager.createSingleTaskCoreData(
+                        from: task,
+                        title: taskTitleTextField,
+                        date: .now
+                    )
+                }
                 
                 dismiss()
             }) {

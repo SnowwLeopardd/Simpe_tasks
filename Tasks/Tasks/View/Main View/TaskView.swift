@@ -20,7 +20,9 @@ struct TaskView: View {
                 Button {
                     let updatedTask = task
                     updatedTask.completed.toggle()
-                    coreDataManager.updateTaskCoreData(from: updatedTask, completed: updatedTask.completed)
+                    DispatchQueue.global().async {
+                        coreDataManager.updateTaskCoreData(from: updatedTask, completed: updatedTask.completed)
+                    }
                 } label: {
                     Image(systemName: task.completed ? "checkmark.circle.fill" : "circle")
                         .foregroundColor(task.completed ? .yellow : .gray)
@@ -53,10 +55,3 @@ struct TaskView: View {
         }
     }
 }
-
-//#Preview {
-//    let coreDataManager: CoreDataManagerProtocol = CoreDataManager()
-//    let task = coreDataManager.fetchData().first!
-//    
-//    TaskView(task: task)
-//}

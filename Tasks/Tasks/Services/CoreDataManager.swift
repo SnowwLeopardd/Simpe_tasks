@@ -7,7 +7,8 @@
 
 import CoreData
 
-class CoreDataManager: ObservableObject {
+final class CoreDataManager: ObservableObject {
+    
     let mainContext: NSManagedObjectContext
     
     @Published var savedEntities: [SingleTaskCoreData] = []
@@ -15,6 +16,7 @@ class CoreDataManager: ObservableObject {
     
     var filteredSavedEntities: [SingleTaskCoreData] {
         guard !searchText.isEmpty else { return savedEntities }
+        
         return savedEntities.filter { savedEntity in
             savedEntity.todo?.lowercased().contains(searchText.lowercased()) ?? false ||
             savedEntity.title?.lowercased().contains(searchText.lowercased()) ?? false
@@ -31,7 +33,9 @@ class CoreDataManager: ObservableObject {
         if mainContext.hasChanges {
             do {
                 try mainContext.save()
-                fetchData()
+                DispatchQueue.main.async {
+                    self.fetchData()
+                }
             } catch {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
@@ -40,6 +44,29 @@ class CoreDataManager: ObservableObject {
     }
     
     // MARK: - CRUD operators
+    private func fetchData() {
+        let fetchRequest = SingleTaskCoreData.fetchRequest()
+        
+        do {
+            savedEntities = try mainContext.fetch(fetchRequest)
+        } catch  {
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func fetchTask(by id: UUID) -> SingleTaskCoreData? {
+        let fetchRequest: NSFetchRequest<SingleTaskCoreData> = SingleTaskCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        
+        do {
+            let results = try mainContext.fetch(fetchRequest)
+            return results.first
+        } catch {
+            print("Failed to fetch task: \(error)")
+            return nil
+        }
+    }
+    
     func createSingleTaskCoreData(from taskAPI: SingleTask, title: String? = nil, date: Date? = nil) {
         let singleTask = SingleTaskCoreData(context: mainContext)
         
@@ -53,59 +80,35 @@ class CoreDataManager: ObservableObject {
         saveContext()
     }
     
-    func fetchData() {
-        let fetchRequest = SingleTaskCoreData.fetchRequest()
-        
-        do {
-            savedEntities = try mainContext.fetch(fetchRequest)
-        } catch  {
-            print(error.localizedDescription)
-        }
-    }
-    
     func delete(_ task: SingleTaskCoreData) {
         mainContext.delete(task)
         saveContext()
     }
     
-    private func fetchTask(by id: UUID) -> SingleTaskCoreData? {
-        let fetchRequest: NSFetchRequest<SingleTaskCoreData> = SingleTaskCoreData.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-        
-        do {
-            let results = try mainContext.fetch(fetchRequest)
-            print(results)
-            return results.first
-        } catch {
-            print("Failed to fetch task: \(error)")
-            return nil
-        }
-    }
-    
-    func updateTaskCoreData(from task: SingleTaskCoreData, completed: Bool?) {
+    func updateTaskCoreData(from task: SingleTaskCoreData, completed: Bool) {
         if let taskToUpdate = fetchTask(by: task.id ?? UUID()) {
-            taskToUpdate.completed = completed ?? taskToUpdate.completed
+            taskToUpdate.completed = completed
             saveContext()
         }
     }
     
     func updateTaskCoreData(from task: SingleTaskCoreData, todo: String?) {
         if let taskToUpdate = fetchTask(by: task.id ?? UUID()) {
-            taskToUpdate.todo = todo ?? taskToUpdate.todo
+            taskToUpdate.todo = todo
             saveContext()
         }
     }
     
     func updateTaskCoreData(from task: SingleTaskCoreData, title: String?) {
         if let taskToUpdate = fetchTask(by: task.id ?? UUID()) {
-            taskToUpdate.title = title ?? String(localized: "API did not provide title")
+            taskToUpdate.title = title
             saveContext()
         }
     }
     
     func updateTaskCoreData(from task: SingleTaskCoreData, date: Date?) {
         if let taskToUpdate = fetchTask(by: task.id ?? UUID()) {
-            taskToUpdate.date = date ?? Date.distantFuture
+            taskToUpdate.date = date
             saveContext()
         }
     }

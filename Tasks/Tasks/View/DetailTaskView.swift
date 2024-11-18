@@ -37,12 +37,11 @@ struct DetailTaskView: View {
             }
         }
         .onDisappear {
-            coreDataManager.updateTaskCoreData(from: task, todo: taskToDo)
-            coreDataManager.updateTaskCoreData(from: task, date: taskDate)
+            DispatchQueue.global().async {
+                coreDataManager.updateTaskCoreData(from: task, todo: taskToDo)
+                coreDataManager.updateTaskCoreData(from: task, date: taskDate)
+                coreDataManager.updateTaskCoreData(from: task, title: taskHeader)
+            }
         }
     }
 }
-
-//#Preview {
-//    DetailTaskView()
-//}
