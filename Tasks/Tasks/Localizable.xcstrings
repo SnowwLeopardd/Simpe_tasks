@@ -1,0 +1,51 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lld_tasks" : {
+
+    },
+    "Add_task" : {
+
+    },
+    "API did not provide title" : {
+
+    },
+    "Date" : {
+
+    },
+    "Date_not_found" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Description_of_the_task" : {
+
+    },
+    "Edit" : {
+
+    },
+    "Enter_title_of_the_task" : {
+
+    },
+    "Enter_your_task" : {
+
+    },
+    "Header" : {
+
+    },
+    "JSON_doesn't_contain_date" : {
+
+    },
+    "JSON_doesn't_contain_title" : {
+
+    },
+    "super_important_title" : {
+
+    },
+    "Tasks" : {
+
+    }
+  },
+  "version" : "1.0"
+}

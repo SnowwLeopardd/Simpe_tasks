@@ -14,7 +14,7 @@ struct MockTabView: View {
         HStack {
             Spacer()
             
-            Text("\(coreDataManager.filteredSavedEntities.count)_tasks")
+            Text(String(localized: "\(coreDataManager.filteredSavedEntities.count)_tasks"))
                 .foregroundColor(.white)
             
             Spacer()

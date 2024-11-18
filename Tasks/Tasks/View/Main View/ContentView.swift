@@ -23,13 +23,13 @@ struct ContentView: View {
                                 Button {
                                     path.append(task)
                                 } label: {
-                                    Label("Edit", systemImage: "pencil")
+                                    Label(String(localized: "Edit"), systemImage: "pencil")
                                 }
                                 
                                 Button(role: .destructive) {
                                     coreDataManager.delete(task)
                                 } label: {
-                                    Label("Delete", systemImage: "trash")
+                                    Label(String(localized: "Delete"), systemImage: "trash")
                                 }
                             }
                     }

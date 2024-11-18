@@ -9,7 +9,7 @@ import Foundation
 extension DateFormatter {
     static func convertDateToString(from date: Date?) -> String {
         guard let date = date else {
-            return "Date not found"
+            return String(localized: "Date_not_found") 
         }
         
         let dateFormatter = DateFormatter()

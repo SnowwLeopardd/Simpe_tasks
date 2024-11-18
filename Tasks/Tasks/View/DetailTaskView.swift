@@ -20,9 +20,9 @@ struct DetailTaskView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            TextField("Header", text: $taskHeader)
+            TextField(String(localized: "Header"), text: $taskHeader)
             
-            DatePicker("Date", selection: $taskDate, displayedComponents: .date)
+            DatePicker(String(localized: "Date"), selection: $taskDate, displayedComponents: .date)
                 .labelsHidden()
             
             TextEditor(text: $taskToDo)

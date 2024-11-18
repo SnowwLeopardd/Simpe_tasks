@@ -48,7 +48,7 @@ class CoreDataManager: ObservableObject {
         singleTask.completed = taskAPI.completed
         singleTask.todo = taskAPI.todo
         singleTask.userId = Int64(taskAPI.userId)
-        singleTask.title = title ?? "API did not provid title"
+        singleTask.title = title ?? String(localized: "JSON_doesn't_contain_title")
         singleTask.date = date
         saveContext()
     }
@@ -98,7 +98,7 @@ class CoreDataManager: ObservableObject {
     
     func updateTaskCoreData(from task: SingleTaskCoreData, title: String?) {
         if let taskToUpdate = fetchTask(by: task.id ?? UUID()) {
-            taskToUpdate.title = title ?? "API did not provide title"
+            taskToUpdate.title = title ?? String(localized: "API did not provide title")
             saveContext()
         }
     }

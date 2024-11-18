@@ -9,7 +9,6 @@ import Foundation
 enum APIError: Error {
     case invalidURL
     case invalidDecoding
-    
 }
 
 final class NetworkManager: NetworkManagerProtocol {
