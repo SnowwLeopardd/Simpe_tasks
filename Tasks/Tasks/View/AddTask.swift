@@ -72,7 +72,7 @@ struct AddTask: View {
                 coreDataManager.createSingleTaskCoreData(
                     from: task,
                     title: taskTitleTextField,
-                    date: ".now"
+                    date: .now
                     )
                 
                 dismiss()

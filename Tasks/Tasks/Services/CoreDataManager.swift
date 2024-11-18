@@ -40,7 +40,7 @@ class CoreDataManager: ObservableObject {
     }
     
     // MARK: - CRUD operators
-    func createSingleTaskCoreData(from taskAPI: SingleTask, title: String? = nil, date: String? = nil) {
+    func createSingleTaskCoreData(from taskAPI: SingleTask, title: String? = nil, date: Date? = nil) {
         let singleTask = SingleTaskCoreData(context: mainContext)
         
         singleTask.apiId = Int64(taskAPI.id)
@@ -49,7 +49,7 @@ class CoreDataManager: ObservableObject {
         singleTask.todo = taskAPI.todo
         singleTask.userId = Int64(taskAPI.userId)
         singleTask.title = title ?? "API did not provid title"
-        singleTask.date = date ?? "API did not provid date"
+        singleTask.date = date
         saveContext()
     }
     
@@ -103,9 +103,9 @@ class CoreDataManager: ObservableObject {
         }
     }
     
-    func updateTaskCoreData(from task: SingleTaskCoreData, date: String?) {
+    func updateTaskCoreData(from task: SingleTaskCoreData, date: Date?) {
         if let taskToUpdate = fetchTask(by: task.id ?? UUID()) {
-            taskToUpdate.date = date ?? "API did not provide date"
+            taskToUpdate.date = date ?? Date.distantFuture
             saveContext()
         }
     }

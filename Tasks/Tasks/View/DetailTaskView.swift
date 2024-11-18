@@ -15,20 +15,30 @@ struct DetailTaskView: View {
     let task: SingleTaskCoreData
     
     @State var taskToDo = ""
+    @State var taskHeader = ""
+    @State var taskDate = Date.now
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(task.date ?? "")
+            TextField("Header", text: $taskHeader)
+            
+            DatePicker("Date", selection: $taskDate, displayedComponents: .date)
+                .labelsHidden()
             
             TextEditor(text: $taskToDo)
         }
         .padding(.horizontal, 16)
-        .navigationTitle(task.title ?? "")
         .onAppear {
             taskToDo = task.todo ?? ""
+            taskHeader = task.title ?? ""
+            
+            if let date = task.date {
+                taskDate = date
+            }
         }
         .onDisappear {
             coreDataManager.updateTaskCoreData(from: task, todo: taskToDo)
+            coreDataManager.updateTaskCoreData(from: task, date: taskDate)
         }
     }
 }

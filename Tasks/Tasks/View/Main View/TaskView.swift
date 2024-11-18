@@ -39,7 +39,7 @@ struct TaskView: View {
                         .foregroundColor(task.completed ? .gray : .black)
                         .font(.subheadline)
                     
-                    Text(task.date ?? "")
+                    Text((task.date == nil) ? "JSON_doesn't_contain_date" : DateFormatter.convertDateToString(from: task.date))
                         .font(.footnote)
                         .foregroundColor(.gray)
                 }
